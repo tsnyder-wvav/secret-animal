@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Secret Animal Game</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family:'Fredoka', Arial, sans-serif;
+    background:#f4e7d3;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* ================= GAME CONTAINER ================= */
+
+#game{
+    width:1200px;
+    height:680px;
+    background:#fff7ed;
+    border-radius:18px;
+    padding:18px 22px;
+    border:3px solid #d6b98c;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    box-sizing:border-box;
+}
+
+/* TITLE */
+
+h1{
+    text-align:center;
+    color:#7a4e1d;
+    margin:0 0 8px 0;
+    font-size:52px;
+    font-weight:600;
+}
+
+/* RANGE */
+
+#range{
+    display:flex;
+    justify-content:space-between;
+    align-items:stretch;
+    margin:10px 0;
+    gap:18px;
+}
+
+.rangeWord{
+    flex:1;
+    text-align:center;
+    padding:28px 10px;
+    border-radius:14px;
+    font-size:36px;
+    font-weight:600;
+    border:2px solid #c79b62;
+    text-transform:uppercase;
+    background:#e7c9a1;
+    transition: background 0.25s ease, transform 0.25s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:95px;
+}
+
+/* SAFE UNIVERSAL ARROWS */
+
+#middle{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    min-width:140px;
+    color:#7a4e1d;
+}
+
+.arrow{
+    font-size:38px;
+    font-weight:600;
+    line-height:1;
+}
+
+.question{
+    font-size:34px;
+    font-weight:600;
+    line-height:1;
+}
+
+/* DISPLAY */
+
+#display{
+    text-align:center;
+    font-size:30px;
+    min-height:30px;
+    color:#5b3711;
+}
+
+/* KEYBOARD */
+
+#keyboard{
+    margin-top:10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+}
+
+.keyRow{
+    display:flex;
+    gap:6px;
+}
+
+.key{
+    padding:10px 12px;
+    background:#e7c9a1;
+    border:2px solid #c79b62;
+    border-radius:8px;
+    cursor:pointer;
+    min-width:34px;
+    text-align:center;
+    font-weight:600;
+    font-size:24px;
+    transition:transform 0.12s ease;
+}
+
+.key:hover{
+    transform:translateY(-2px);
+}
+
+.key.special{
+    min-width:80px;
+}
+
+/* ANIMATIONS */
+
+.flash{
+    animation: pop 0.25s ease;
+}
+
+@keyframes pop{
+    0%{ transform:scale(1); }
+    50%{ transform:scale(1.08); }
+    100%{ transform:scale(1); }
+}
+
+.shake{
+    animation: shake 0.25s ease;
+}
+
+@keyframes shake{
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+
+/* ================= OVERLAY ================= */
+
+#overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:10;
+}
+
+#overlayCard{
+    background:#fff7ed;
+    padding:28px;
+    border-radius:18px;
+    width:90%;
+    max-width:520px;
+    text-align:center;
+    border:3px solid #d6b98c;
+    box-shadow:0 12px 40px rgba(0,0,0,0.3);
+}
+
+#overlayCard h2{
+    margin-top:0;
+    font-size:34px;
+    color:#7a4e1d;
+}
+
+#overlayCard p{
+    font-size:18px;
+    line-height:1.5;
+    color:#5b3711;
+}
+
+#overlayBtn{
+    width:100%;
+    padding:12px;
+    margin-top:14px;
+    font-size:16px;
+    border-radius:10px;
+    border:none;
+    background:#c79b62;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+}
+
+#overlayBtn:hover{
+    opacity:0.9;
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<h1>Secret Animal Game</h1>
+
+<div id="range">
+
+    <div class="rangeWord" id="lowWord">
+        AARDVARK
+    </div>
+
+    <div id="middle">
+        <span class="arrow">←</span>
+        <span class="question">?</span>
+        <span class="arrow">→</span>
+    </div>
+
+    <div class="rangeWord" id="highWord">
+        ZEBRA
+    </div>
+
+</div>
+
+<div id="display"></div>
+
+<div id="keyboard"></div>
+
+</div>
+
+<!-- OVERLAY -->
+
+<div id="overlay">
+    <div id="overlayCard">
+
+        <h2>Secret Animal Game</h2>
+
+        <p>
+            Guess the hidden animal alphabetically between the two words.<br><br>
+
+            Color hints show how close your guess is:<br><br>
+
+            🟩 Green = within 10 animals<br>
+            🟨 Yellow = within 30 animals<br>
+            🟧 Orange = within 60 animals<br>
+            🟥 Dark Red = very far away<br><br>
+
+            ⚠️ Guessing outside the current range instantly ends the game.<br>
+            ❌ 3 invalid animal guesses in a row also ends the game.
+        </p>
+
+        <button id="overlayBtn">Start Game</button>
+
+    </div>
+</div>
+
+<script>
+
+/* ================= WORD LIST ================= */
+
+const words = [
+"aardvark","albatross","alligator","alpaca","anaconda","angelfish","ant","anteater","antelope","ape","armadillo","axolotl","baboon","badger","barracuda","bat","batfish","bear","beaver","bee",
+"beetle","bighorn","bison","blackbird","blackbear","bluebird","bluegill","boar","bobcat","bonobo","buffalo",
+"butterfly","buzzard","camel","capybara","caribou","carp","cassowary","cat","caterpillar","catfish","chameleon",
+"cheetah","chicken","chimpanzee","chipmunk","chinchilla","cicada","clam","clownfish","cobra","cockatoo","cod","condor",
+"cougar","cow","coyote","crab","crane","cricket","crocodile","crow","deer","dingo",
+"dodo","dog","dolphin","donkey","dove","dragonfly","duck","eagle","echidna","eel",
+"elephant","elk","emu","falcon","ferret","finch","fireant","firefly","fish","flamingo","flea","flounder",
+"fly","fox","frog","gazelle","gecko","gerbil","gibbon","giraffe","goat","goldfish",
+"goose","gorilla","grasshopper","grizzly","grouse","guinea","hamster","hare","hawk","hedgehog","heron",
+"herring","hippo","hornbill","hornet","horse","hummingbird","hyena","ibex","ibis","iguana","impala",
+"jackal","jackrabbit","jaguar","jellyfish","kangaroo","kingfisher","kiwi","koala","komodo","krill","ladybug",
+"lark","leech","lemur","leopard","lion","liger","lizard","llama","lobster","locust","lynx",
+"macaw","magpie","manatee","manta","mantis","marmot","meerkat","minnow","mole","mongoose",
+"monkey","moose","mosquito","moth","mouse","narwhal","newt","nightingale","octopus","okapi",
+"opossum","orangutan","orca","ostrich","otter","owl","ox","oyster","panda","panther",
+"parrot","partridge","peacock","pelican","penguin","pheasant","pig","pigeon","piranha","platypus","porcupine","possum","prawn","puffin","puma","quail","rabbit","raccoon",
+"rat","raven","reindeer","rhino","robin","rooster","salamander","salmon","sandpiper","sardine",
+"scorpion","seahorse","seal","shark","sheep","shrew","shrimp","skunk","sloth","snail",
+"snake","sparrow","spider","squid","squirrel","starfish","stork","swan","termite","tiger",
+"toad","toucan","trout","turkey","turtle","vulture","walrus","wasp","weasel","whale",
+"wolf","wolverine","wombat","woodpecker","worm","yak","zebra"
+];
+
+let sortedWords = [...words].sort();
+
+/* ================= STATE ================= */
+
+let secret = "";
+let low = "aardvark";
+let high = "zebra";
+
+let guess = "";
+let gameOver = false;
+let count = 0;
+let invalidStreak = 0;
+
+/* ================= ELEMENTS ================= */
+
+const overlay = document.getElementById("overlay");
+const overlayBtn = document.getElementById("overlayBtn");
+
+const lowEl = document.getElementById("lowWord");
+const highEl = document.getElementById("highWord");
+
+const display = document.getElementById("display");
+const keyboard = document.getElementById("keyboard");
+
+/* ================= HELPERS ================= */
+
+function distance(a, b){
+    return Math.abs(
+        sortedWords.indexOf(a) - sortedWords.indexOf(b)
+    );
+}
+
+/* WORDLE STYLE HEATMAP */
+
+function heatColor(g){
+
+    const d = distance(g, secret);
+
+    if(d <= 10){
+        return "#65E959";
+    }
+
+    if(d <= 30){
+        return "#F4F72B";
+    }
+
+    if(d <= 60){
+        return "#d97706";
+    }
+
+    return "#7f1d1d";
+}
+
+function isOutOfRange(g){
+
+    const gi = sortedWords.indexOf(g);
+    const li = sortedWords.indexOf(low);
+    const hi = sortedWords.indexOf(high);
+
+    return gi <= li || gi >= hi;
+}
+
+function triggerLoss(reason){
+
+    gameOver = true;
+
+    overlay.style.display = "flex";
+
+    overlay.querySelector("p").innerHTML =
+        `Game Over<br><br>${reason}<br><br>The animal was <b>${secret.toUpperCase()}</b>`;
+
+    overlayBtn.textContent = "Play Again";
+}
+
+/* ================= START GAME ================= */
+
+function startGame(){
+
+    guess = "";
+    gameOver = false;
+    count = 0;
+    invalidStreak = 0;
+
+    low = "aardvark";
+    high = "zebra";
+
+    const pool = sortedWords.filter(
+        w => w > low && w < high
+    );
+
+    secret = pool[
+        Math.floor(Math.random() * pool.length)
+    ];
+
+    overlay.style.display = "none";
+
+    lowEl.style.background = heatColor(low);
+    highEl.style.background = heatColor(high);
+
+    lowEl.textContent = low.toUpperCase();
+    highEl.textContent = high.toUpperCase();
+
+    display.textContent = "";
+}
+
+/* ================= SUBMIT ================= */
+
+function submit(){
+
+    if(gameOver) return;
+
+    let g = guess.trim().toLowerCase();
+
+    guess = "";
+
+    display.textContent = "";
+
+    if(!g) return;
+
+    /* INVALID WORD */
+
+    if(!sortedWords.includes(g)){
+
+        invalidStreak++;
+
+        display.textContent =
+            `Invalid (${invalidStreak}/3)`;
+
+        display.classList.add("shake");
+
+        setTimeout(()=>{
+            display.classList.remove("shake");
+        },250);
+
+        if(invalidStreak >= 3){
+            triggerLoss(
+                "3 invalid guesses in a row"
+            );
+        }
+
+        return;
+    }
+
+    invalidStreak = 0;
+
+    /* STARTING WORDS ALREADY USED */
+
+    if(g === "aardvark" || g === "zebra"){
+
+        display.textContent = "Already given";
+
+        display.classList.add("shake");
+
+        setTimeout(()=>{
+            display.classList.remove("shake");
+        },250);
+
+        return;
+    }
+
+    /* OUT OF RANGE */
+
+    if(isOutOfRange(g)){
+        triggerLoss(
+            "Guess outside range"
+        );
+        return;
+    }
+
+    count++;
+
+    /* WIN */
+
+    if(g === secret){
+
+        gameOver = true;
+
+        overlay.style.display = "flex";
+
+        overlay.querySelector("p").innerHTML =
+            `You Win!<br><br><b>${secret.toUpperCase()}</b><br>Guesses: ${count}`;
+
+        overlayBtn.textContent = "Play Again";
+
+        return;
+    }
+
+    /* UPDATE RANGE */
+
+    if(g < secret){
+
+        low = g;
+
+        lowEl.style.background =
+            heatColor(g);
+
+        lowEl.classList.add("flash");
+
+        setTimeout(()=>{
+            lowEl.classList.remove("flash");
+        },200);
+
+    } else {
+
+        high = g;
+
+        highEl.style.background =
+            heatColor(g);
+
+        highEl.classList.add("flash");
+
+        setTimeout(()=>{
+            highEl.classList.remove("flash");
+        },200);
+    }
+
+    lowEl.textContent =
+        low.toUpperCase();
+
+    highEl.textContent =
+        high.toUpperCase();
+}
+
+/* ================= KEYBOARD INPUT ================= */
+
+document.addEventListener("keydown",(e)=>{
+
+    if(gameOver) return;
+
+    let k = e.key.toLowerCase();
+
+    if(k === "enter"){
+        return submit();
+    }
+
+    if(k === "backspace"){
+
+        guess = guess.slice(0,-1);
+
+        display.textContent =
+            guess.toUpperCase();
+
+        return;
+    }
+
+    if(/^[a-z]$/.test(k)){
+
+        guess += k;
+
+        display.textContent =
+            guess.toUpperCase();
+    }
+});
+
+/* ================= ON SCREEN KEYBOARD ================= */
+
+function buildKeyboard(){
+
+    const rows = [
+        "qwertyuiop",
+        "asdfghjkl",
+        "zxcvbnm"
+    ];
+
+    rows.forEach(r=>{
+
+        const row =
+            document.createElement("div");
+
+        row.className = "keyRow";
+
+        r.split("").forEach(l=>{
+
+            const k =
+                document.createElement("div");
+
+            k.className = "key";
+
+            k.textContent =
+                l.toUpperCase();
+
+            k.onclick = ()=>{
+
+                guess += l;
+
+                display.textContent =
+                    guess.toUpperCase();
+            };
+
+            row.appendChild(k);
+        });
+
+        keyboard.appendChild(row);
+    });
+
+    const bottom =
+        document.createElement("div");
+
+    bottom.className = "keyRow";
+
+    const back =
+        document.createElement("div");
+
+    back.className = "key special";
+
+    back.textContent = "⌫";
+
+    back.onclick = ()=>{
+
+        guess = guess.slice(0,-1);
+
+        display.textContent =
+            guess.toUpperCase();
+    };
+
+    const enter =
+        document.createElement("div");
+
+    enter.className = "key special";
+
+    enter.textContent = "ENTER";
+
+    enter.onclick = submit;
+
+    bottom.appendChild(back);
+    bottom.appendChild(enter);
+
+    keyboard.appendChild(bottom);
+}
+
+/* ================= INIT ================= */
+
+overlayBtn.onclick = startGame;
+
+buildKeyboard();
+
+</script>
+
+</body>
+</html>
