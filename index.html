@@ -243,7 +243,7 @@ h1{
     </div>
 
     <div class="rangeWord" id="highWord">
-        ZEBRA
+        ZEBU
     </div>
 
 </div>
@@ -264,15 +264,16 @@ h1{
         <p>
             Guess the hidden animal alphabetically between the two words.<br><br>
 
-            Color hints show how close your guess is:<br><br>
+Color hints show how close your guess is:<br><br>
 
-            🟩 Green = within 10 animals<br>
-            🟨 Yellow = within 30 animals<br>
-            🟧 Orange = within 60 animals<br>
-            🟥 Red = very far away<br><br>
+🟩 Green = within 10 animals<br>
+🟨 Yellow = within 30 animals<br>
+🟧 Orange = within 60 animals<br>
+🟥 Red = very far away<br><br>
 
-            ⚠️ Guessing outside the current range instantly ends the game.<br>
-            ❌ 3 invalid animal guesses in a row also ends the game.
+⚠️ Guessing outside the current range instantly ends the game.<br>
+❌ 3 invalid animal guesses in a row also ends the game.<br>
+🐾 There are 240 animals to guess from!
         </p>
 
         <button id="overlayBtn">Start Game</button>
@@ -285,27 +286,29 @@ h1{
 /* ================= WORD LIST ================= */
 
 const words = [
-"aardvark","albatross","alligator","alpaca","anaconda","angelfish","ant","anteater","antelope","ape","armadillo","axolotl","baboon","badger","barracuda","bat","batfish","bear","beaver","bee",
-"beetle","bighorn","bison","blackbird","blackbear","bluebird","bluegill","boar","bobcat","bonobo","buffalo",
-"butterfly","buzzard","camel","capybara","caribou","carp","cassowary","cat","caterpillar","catfish","chameleon",
-"cheetah","chicken","chimpanzee","chipmunk","chinchilla","cicada","clam","clownfish","cobra","cockatoo","cod","condor",
-"cougar","cow","coyote","crab","crane","cricket","crocodile","crow","deer","dingo",
-"dodo","dog","dolphin","donkey","dove","dragonfly","duck","eagle","echidna","eel",
-"elephant","elk","emu","falcon","ferret","finch","fireant","firefly","fish","flamingo","flea","flounder",
-"fly","fox","frog","gazelle","gecko","gerbil","gibbon","giraffe","goat","goldfish",
-"goose","gorilla","grasshopper","grizzly","grouse","guinea","hamster","hare","hawk","hedgehog","heron",
-"herring","hippo","hornbill","hornet","horse","hummingbird","hyena","ibex","ibis","iguana","impala",
-"jackal","jackrabbit","jaguar","jellyfish","kangaroo","kingfisher","kiwi","koala","komodo","krill","ladybug",
-"lark","leech","lemur","leopard","lion","liger","lizard","llama","lobster","locust","lynx",
-"macaw","magpie","manatee","manta","mantis","marmot","meerkat","minnow","mole","mongoose",
-"monkey","moose","mosquito","moth","mouse","narwhal","newt","nightingale","octopus","okapi",
-"opossum","orangutan","orca","ostrich","otter","owl","ox","oyster","panda","panther",
-"parrot","partridge","peacock","pelican","penguin","pheasant","pig","pigeon","piranha","platypus","porcupine","possum","prawn","puffin","puma","quail","rabbit","raccoon",
-"rat","raven","reindeer","rhino","robin","rooster","salamander","salmon","sandpiper","sardine",
-"scorpion","seahorse","seal","shark","sheep","shrew","shrimp","skunk","sloth","snail",
-"snake","sparrow","spider","squid","squirrel","starfish","stork","swan","termite","tiger",
-"toad","toucan","trout","turkey","turtle","vulture","walrus","wasp","weasel","whale",
-"wolf","wolverine","wombat","woodpecker","worm","yak","zebra"
+"aardvark","albatross","alligator","alpaca","anaconda","angelfish","ant","anteater","antelope","ape","armadillo","axolotl",
+"baboon","badger","barracuda","bat","bear","beaver","bee","beetle","bighorn","bison","blackbear","blackbird","bluebird","bluegill","boar","bobcat","bonobo","buffalo","butterfly","buzzard",
+"camel","capybara","caribou","carp","cassowary","cat","caterpillar","catfish","chameleon","cheetah","chicken","chimpanzee","chinchilla","chipmunk","cicada","clam","clownfish","cobra","cockatoo","cod","condor","cougar","cow","coyote","crab","crane","cricket","crocodile","crow","cuttlefish",
+"deer","dingo","dodo","dog","dolphin","donkey","dove","dragonfly","duck","dugong",
+"eagle","eel","elephant","elk","emu",
+"falcon","ferret","finch","fireant","firefly","fish","flamingo","flea","flounder","fly","fox","frog",
+"gazelle","gecko","gerbil","gibbon","giraffe","goat","goldfish","goose","gorilla","grasshopper","grizzly","grouse","guinea",
+"haddock","hamster","hare","hawk","hedgehog","heron","herring","hippo","hornbill","hornet","horse","hummingbird","hyena",
+"ibex","ibis","iguana",
+"jackal","jackrabbit","jaguar","jellyfish",
+"kangaroo","kingfisher","kiwi","koala","komodo","krill",
+"ladybug","lark","leech","lemur","leopard","liger","lion","lizard","llama","lobster","locust","lynx",
+"macaw","magpie","manatee", "mantis","marmot","meerkat","minnow","mole","mongoose","monkey","moose","mosquito","moth","mouse",
+"narwhal","newt","nightingale",
+"octopus","ocelot","okapi","opossum","orangutan","orca","ostrich","otter","owl","ox","oyster",
+"panda","pangolin","panther","parrot","partridge","peacock","pelican","penguin","pheasant","pig","pigeon","piranha","platypus","porcupine","possum","prawn","puffin","puma",
+"quail","rabbit","raccoon","rat","raven","reindeer","rhino","robin","rooster",
+"salamander","salmon","sandpiper","sardine","scorpion","seal","seahorse","shark","sheep","shrew","shrimp","skunk","sloth","snail","snake","sparrow","spider","squid","squirrel","starfish","stork","sunfish","swan",
+"termite","tiger","toad","toucan","trout","turkey","turtle",
+"vulture",
+"wallaby","walrus","wasp","weasel","whale","wildebeest","wolf","wolverine","wombat","woodpecker","worm",
+"yak",
+"zebra","zebu"
 ];
 
 let sortedWords = [...words].sort();
@@ -314,7 +317,7 @@ let sortedWords = [...words].sort();
 
 let secret = "";
 let low = "aardvark";
-let high = "zebra";
+let high = "zebu";
 
 let guess = "";
 let gameOver = false;
@@ -392,7 +395,7 @@ function startGame(){
     invalidStreak = 0;
 
     low = "aardvark";
-    high = "zebra";
+    high = "zebu";
 
     const pool = sortedWords.filter(
         w => w > low && w < high
@@ -455,7 +458,7 @@ function submit(){
 
     /* STARTING WORDS ALREADY USED */
 
-    if(g === "aardvark" || g === "zebra"){
+    if(g === "aardvark" || g === "zebu"){
 
         display.textContent = "Already given";
 
