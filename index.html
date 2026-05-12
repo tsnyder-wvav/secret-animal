@@ -9,6 +9,7 @@
 
 <style>
 body{
+    user-select:none;
     margin:20px;
     font-family:'Fredoka', Arial, sans-serif;
     background:#f4e7d3;
@@ -19,8 +20,9 @@ body{
     overflow:hidden;
 }
 
-@media (max-height: 650px){
+@media (max-height: 630px){
     body{
+        margin:0px;
         align-items:flex-start;
     }
 }
@@ -29,7 +31,7 @@ body{
 
 #game{
     width:1150px;
-    height:620px;
+    height:600px;
     background:#fff7ed;
     border-radius:18px;
     padding:18px 22px;
@@ -238,7 +240,7 @@ h1{
 
     <div id="middle">
         <span class="arrow">←</span>
-        <span class="question">?</span>
+        <span class="question" id="questionMark">?</span>
         <span class="arrow">→</span>
     </div>
 
@@ -271,9 +273,10 @@ Color hints show how close your guess is:<br><br>
 🟧 Orange = within 60 animals<br>
 🟥 Red = very far away<br><br>
 
-⚠️ Guessing outside the current range instantly ends the game.<br>
-❌ 3 invalid animal guesses in a row also ends the game.<br>
-🐾 There are 240 animals to guess from!
+⚠️ Guesses outside the current range are invalid.<br>
+🧠 Misspelled or non-animal words will be marked invalid.<br>
+❌ 3 invalid guesses in a row ends the game.<br>
+🐾 There are 240 SINGLE-WORD animals to guess from!
         </p>
 
         <button id="overlayBtn">Start Game</button>
@@ -328,7 +331,7 @@ let invalidStreak = 0;
 
 const overlay = document.getElementById("overlay");
 const overlayBtn = document.getElementById("overlayBtn");
-
+const questionEl = document.getElementById("questionMark");
 const lowEl = document.getElementById("lowWord");
 const highEl = document.getElementById("highWord");
 
@@ -393,7 +396,7 @@ function startGame(){
     gameOver = false;
     count = 0;
     invalidStreak = 0;
-
+    questionEl.textContent = "?";
     low = "aardvark";
     high = "zebu";
 
@@ -474,9 +477,16 @@ function submit(){
     /* OUT OF RANGE */
 
     if(isOutOfRange(g)){
-        triggerLoss(
-            "Guess outside range"
-        );
+
+        display.textContent =
+            "Invalid — Out of Range";
+
+        display.classList.add("shake");
+
+        setTimeout(()=>{
+            display.classList.remove("shake");
+        },250);
+
         return;
     }
 
@@ -532,6 +542,17 @@ function submit(){
 
     highEl.textContent =
         high.toUpperCase();
+
+    /* LETTER HINT WHEN BOTH SIDES GREEN */
+
+    if(
+        distance(low, secret) <= 10 &&
+        distance(high, secret) <= 10
+    ){
+
+        questionEl.textContent =
+            "_ ".repeat(secret.length).trim();
+    }
 }
 
 /* ================= KEYBOARD INPUT ================= */
